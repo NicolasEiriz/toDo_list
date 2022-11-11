@@ -1,5 +1,5 @@
 const deleteText = document.querySelectorAll('.fa-trash')
-const itemDone = document.querySelectorAll('fa-check-circle')
+const itemDone = document.querySelectorAll('.fa-check-circle')
 
 Array.from(deleteText).forEach((element)=>{
   element.addEventListener('click', deleteItem)

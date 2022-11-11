@@ -29,7 +29,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
   })
 
   app.post('/addItem', (request, response) =>{
-    db.collection('todo_list').insertOne({itemName: request.body.itemNameS, itemTime: request.body.itemTimeS, check: 0})
+    db.collection('todo_list').insertOne({itemName: request.body.itemName, itemTime: request.body.itemTime, check: 0})
     .then(result =>{
       console.log('Item Added!')
       response.redirect('/')
