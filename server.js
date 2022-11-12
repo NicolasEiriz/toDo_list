@@ -21,15 +21,15 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
   app.use(express.json())
 
   app.get('/', (request, response)=>{
-    db.collection('todo_list').find().sort({check: -1}).toArray()
+    db.collection('todo_list').find().sort({completed: -1}).toArray()
     .then(data =>{
-      response.render('index.ejs', {info: data})
+      response.render('index.ejs', {item: data})
     })
     .catch(error => console.error(error))
   })
 
   app.post('/addItem', (request, response) =>{
-    db.collection('todo_list').insertOne({itemName: request.body.itemName, itemTime: request.body.itemTime, check: 0})
+    db.collection('todo_list').insertOne({thingToDo: request.body.itemName, completed: false})
     .then(result =>{
       console.log('Item Added!')
       response.redirect('/')
