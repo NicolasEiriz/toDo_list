@@ -22,7 +22,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
 
   app.get('/', async (request, response)=>{
     const todoItems = await db.collection('todo_list').find().toArray()
-    const itemsLeft = await db.collection('todo_list').countDocuments({completed:false})
+    const itemsLeft = await db.collection('todo_list').countDocuments({completed: false})
     response.render('index.ejs', { items: todoItems, left: itemsLeft })
   })  
 
@@ -43,7 +43,7 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
       }
     },{
       sort: {_id: -1},
-      upsert: true
+      upsert: false
     })
     .then(result =>{
       console.log('Item completed')

@@ -1,6 +1,6 @@
 const deleteButton = document.querySelectorAll('.fa-trash')
 const item = document.querySelectorAll('.item span')
-const itemCompleted = document.querySelectorAll('.completed')
+const itemCompleted = document.querySelectorAll('.item span.completed')
 
 Array.from(deleteButton).forEach((element)=>{
   element.addEventListener('click', deleteItem)
