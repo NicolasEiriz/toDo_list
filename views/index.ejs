@@ -5,20 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./style.css">
   <title>To Do App</title>
   <style>
-    
+    h1{
+      color: red;
+    }
+    .completed{
+      color: gray;
+      text-decoration: line-through;
+    }
   </style>
 </head>
 <body>
-  <h1>To Do List</h1>
-  <ul class="list">
-    <% for(let i=0; i< item.length; i++) {%>
+  <h1>To Do List: </h1>
+  <ul class="todoItems">
+    <% for(let i=0; i < items.length; i++) {%>
         <li class="item">
-          <% of(item[i].completed === true) {%>
-          <span class='completed'><%= item[i].thingToDo</span> <% } else{ %>}
-          <span><%= item[i].thingToDo %></span>
+          <% if(items[i].completed === true) {%>
+          <span class='completed'><%= items[i].thingToDo %></span> <% } else{ %>
+          <span><%= items[i].thingToDo %></span>
           <%} %>
           <span class="fa fa-check-circle"></span>
           <span class="fa fa-trash"></span>
@@ -28,11 +34,11 @@
 
   <h2>Add a new item to do</h2>
 
-  <form action="/addItem" method="POST">
-    <input type="text" placeholder="Thing to do" name="itemName">
+  <form action="/addTodo" method="POST">
+    <input type="text" placeholder="Thing to do" name="todoItem">
     <input type="submit">
   </form>
 
-  <script src="/public/main.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

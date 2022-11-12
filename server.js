@@ -20,16 +20,15 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
   app.use(express.urlencoded({ extended: true}))
   app.use(express.json())
 
-  app.get('/', (request, response)=>{
-    db.collection('todo_list').find().sort({completed: -1}).toArray()
-    .then(data =>{
-      response.render('index.ejs', {item: data})
-    })
-    .catch(error => console.error(error))
-  })
+  app.get('/', async (request, response)=>{
+    const todoItems = await db.collection('todo_list').find().toArray()
+    const itemsLeft = await db.collection('todo_list').countDocuments({completed:false})
+    response.render('index.ejs', { items: todoItems, left: itemsLeft })
+  })  
 
-  app.post('/addItem', (request, response) =>{
-    db.collection('todo_list').insertOne({thingToDo: request.body.itemName, completed: false})
+
+  app.post('/addTodo', (request, response) =>{
+    db.collection('todo_list').insertOne({thingToDo: request.body.todoItem, completed: false})
     .then(result =>{
       console.log('Item Added!')
       response.redirect('/')
@@ -37,30 +36,47 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
     .catch(error => console.error(error))
   })
 
-  app.put('/checkItem', (request, response)=>{
-    db.collection('todo_list').updateOne({itemName: request.body.itemNameS, itemTime: request.body.itemTimeS, check: request.body.itemCheckS}, {
+  app.put('/markComplete', (request, response)=>{
+    db.collection('todo_list').updateOne({thingToDo: request.body.itemFromJS}, {
       $set: {
-        check:request.body.itemCheckS + 1
+        completed: true
       }
     },{
       sort: {_id: -1},
       upsert: true
     })
     .then(result =>{
-      console.log('Item checked')
-      response.json('Item done')
+      console.log('Item completed')
+      response.json('Item completed')
     })
     .catch(error => console.error(error))
   })
 
-  app.delete('/deleteItem', (request, response)=>{
-    db.collection('todo_list').deleteOne({itemName: request.body.itemNameS})
+  app.put('/markUnComplete', (request, response)=>{
+    db.collection('todo_list').updateOne({thingToDo: request.body.itemFromJS}, {
+      $set: {
+        completed: false
+      }
+    },{
+      sort: {_id: -1},
+      upsert: false
+    })
     .then(result =>{
-      console.log('Item deleted')
-      response.json('Item deleted')
+      console.log('Mark uncompleted')
+      response.json('Mark uncompleted')
     })
     .catch(error=> console.error(error))
   })
+
+app.delete('/deleteItem', (request, response)=>{
+  db.collection('todo_list').deleteOne({thingToDo: request.body.itemFromJS})
+  .then(result =>{
+    console.log('Deleted')
+    response.json('Deleted')
+  })
+  .catch(error=> console.error(error))
+})
+
 
   app.listen(process.env.PORT || PORT, ()=>{
     console.log(`Server running on port ${PORT}`);
