@@ -68,6 +68,19 @@ MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
     .catch(error=> console.error(error))
   })
 
+  app.put('/undo', (request, response)=>{
+    db.collection('todo_list').updateOne({thingToDo: request.body.itemFromJS},{
+      $set:{
+        completed: false
+      }
+    })
+    .then(result=>{
+      console.log('Marked uncompleted')
+      response.json('Marked uncompleted')
+    })
+    .catch(error=> console.error(error))
+  })
+
 app.delete('/deleteItem', (request, response)=>{
   db.collection('todo_list').deleteOne({thingToDo: request.body.itemFromJS})
   .then(result =>{
