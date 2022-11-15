@@ -1,22 +1,25 @@
-const express = require('express')
-const app = express()
-const MongoClient = require('mongodb').MongoClient
-const PORT = 2121
-require('dotenv').config()
+const path = require('path')
+const express = require('express') //requires express thanks to node
+const app = express() //don't know -> Calls the express function in these code
+const MongoClient = require('mongodb').MongoClient //require mongo data base
+const PORT = 2121 //creating a local host
+require('dotenv').config() //require dotenv, not sure what env does
 
-let db,
+let db, //create db variable (not defined yet), dbConnection string variable, and dbName
 dbConnectionStr = process.env.DB_STRING,
 dbName = 'toDo'
 
 
-MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true})
+MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true}) //Connect to my Mongo data base
   .then(client =>{
-    console.log(`Connected to ${dbName} Database`)
-    db = client.db(dbName)
+    console.log(`Connected to ${dbName} Database`) //console log a msj if it does successfully
+    db = client.db(dbName) //assigned my database name to db variable
   })
 
-  app.set('view engine', 'ejs')
-  app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
+
+  app.set('view engine', 'ejs') //setting the ejs (html + js)
+  app.use(express.static('public')) //don't know ->add  a middleware 
   app.use(express.urlencoded({ extended: true}))
   app.use(express.json())
 
