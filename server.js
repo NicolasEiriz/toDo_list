@@ -1,12 +1,12 @@
 const express = require('express') //requires express thanks to node
 const app = express() //don't know -> Calls the express function in these code
-const connectDB = require('./config/database')
+const connectDB = require('./config/database') //require my config folder and database file
 const homeRoutes = require('./routes/home')
 const todoRoutes = require('./routes/todos')
 
 require('dotenv').config({path: './config/.env'})
 
-connectDB()
+connectDB()// call the function in config/database.js and connect to database
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
