@@ -1,92 +1,51 @@
-const deleteButton = document.querySelectorAll('.fa-trash')
-const item = document.querySelectorAll('.item span')
-const itemCompleted = document.querySelectorAll('.item span.completed')
+const deleteBtn = document.querySelectorAll('.del')
+const todoItem = document.querySelectorAll('span.not')
+const todoComplete = document.querySelectorAll('span.completed')
 
-Array.from(deleteButton).forEach((element)=>{
-  element.addEventListener('click', deleteItem)
+Array.from(deleteBtn).forEach((el)=>{
+  el.addEventListener('click', deleteTodo)
 })
 
-Array.from(item).forEach((element)=>{
-  element.addEventListener('click', markComplete)
+Array.from(todoItem).forEach((el)=>{
+  el.addEventListener('click', markComplete)
 })
 
-// Array.from(itemCompleted).forEach((element)=>{
-//   element.addEventListener('click', markUnComplete)
-// })
-
-Array.from(itemCompleted).forEach((element)=>{
-  element.addEventListener('click', undo)
+Array.from(todoComplete).forEach((el)=>{
+  el.addEventListener('click', markIncomplete)
 })
 
-async function deleteItem(){
-  const itemText = this.parentNode.childNodes[1].innerText
+async function deleteTodo(){
+  const todoId = this.parentNode.dataset.id
   try{
-    const response = await fetch('deleteItem', {
+    const response = await fetch('todos/deleteTodo',{
       method: 'delete',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-type': 'application/json'},
       body: JSON.stringify({
-        'itemFromJS': itemText
-      })
-    })
-    const data= await response.json()
-    console.log(data)
-    location.reload()
-  }catch(err){
-    console.log(err)
-  }
-}
-
-async function markComplete(){
-  const itemText = this.parentNode.childNodes[1].innerText
-  try{
-    const response = await fetch('markComplete', {
-      method: 'put',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        'itemFromJS': itemText
-      })
-    })
-        const data = await response.json()
-    console.log(data)
-    location.reload()
-
-  } catch(err){
-    console.log(err)
-  }
-}
-
-// async function markUnComplete(){
-//   const itemText = this.parenNode.childNodes[1].innerText
-//   try{
-//     const response = await fetch('markUnComplete', {
-//       method: 'put',
-//       headers: {'Content-Type': 'application/json'},
-//       body: JSON.stringify({
-//         'itemFromJS': itemText
-//       })
-//     })
-//     const data = await response.json()
-//     console.log(data)
-//     location.reload()
-//   }catch(err){
-//     console.log(err)
-//   }
-// }
-
-async function undo(){
-  const todoText = this.parentNode.childNodes[1].innerText
-  try{
-    const response = await fetch('undo', {
-      method: 'put',
-      headers:{'Content-type': 'application/json'},
-      body: JSON.stringify({
-        'itemFromJS': itemText
+        'todoIdFromJSFile': todoId
       })
     })
     const data = await response.json()
     console.log(data)
     location.reload()
-    }catch(err){
-      console.log(err)
-    }
+   }catch(err){
+    console.log(err) 
+   }
+}
+
+async function markComplete(){
+  const todoId = this.parentNode.dataset.id
+  try{
+    const response = await fetch('todos/markComplete',{
+      method: 'put',
+      headers: {'Content-type': 'application/json'},
+      body: JSON.stringify({
+        'todoIdFromJSFile': todoId
+      })
+    })
+    const data = await response.json()
+    console.log(data)
+  location.reload()
+}catch(err){
+  console.log(err)
+}
 }
